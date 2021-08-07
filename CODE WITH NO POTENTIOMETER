@@ -1,0 +1,27 @@
+CODE WITH NO POTENTIOMETER:
+#include <Servo.h>
+Servo ESC;    // create servo object to control the ESC
+int potValue; // value from the analog pin
+String pot;
+
+void setup() {
+// Attach the ESC on pin 9
+ Serial.begin(2000000); 
+ ESC.attach(3,1000,2000); // (pin, min pulse width, max pulse width in microseconds)
+}
+void loop() {
+   // send data only when you receive data:
+  if (Serial.available() > 0) {
+    // read the incoming byte:
+    pot = Serial.readString();
+    potValue = pot.toInt();
+
+     delay(10);
+    // say what you got:
+    Serial.print("ESC write: ");
+    Serial.println(potValue, DEC);
+  }
+ potValue = constrain(potValue, 0, 180);
+ ESC.write(potValue);   // Send the signal to the ESC
+ delay(10);
+}
